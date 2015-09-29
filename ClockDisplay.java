@@ -17,6 +17,7 @@ public class ClockDisplay
     private NumberDisplay hours;
     private NumberDisplay minutes;
     private String displayString;    // simulates the actual display
+    private int is12HourClock = 1;
     
     /**
      * Constructor for ClockDisplay objects. This constructor 
@@ -53,6 +54,12 @@ public class ClockDisplay
         }
         updateDisplay();
     }
+    
+    public void toggle12HourClock()
+    {
+        is12HourClock = (is12HourClock + 1) % 2;
+        updateDisplay();
+    }
 
     /**
      * Set the time of the display to the specified hour and
@@ -78,7 +85,47 @@ public class ClockDisplay
      */
     private void updateDisplay()
     {
-        displayString = hours.getDisplayValue() + ":" + 
-                        minutes.getDisplayValue();
+        if (is12HourClock == 1)
+        {
+            int modHours = hours.getValue();
+            String ampm = "";
+            if (modHours >= 12)
+            {
+                modHours = modHours - 12;
+                ampm = "pm";
+            
+                if (modHours == 0)
+                {
+                    modHours = 12;
+                }
+            }
+            else if (modHours == 0)
+            {
+                modHours = 12;
+                ampm = "am";
+            }
+            else
+            {
+                ampm = "am";
+            }
+            String convertHours = hoursConvert(modHours);
+            displayString = convertHours + ":" +
+            minutes.getDisplayValue() + ampm;
+        }
+        else
+        {
+            displayString = hours.getDisplayValue() + ":" + 
+            minutes.getDisplayValue();
+            }
+    }
+    
+    private String hoursConvert(int value)
+    {
+        if(value < 10) {
+            return "0" + value;
+        }
+        else {
+            return "" + value;
+        }
     }
 }
